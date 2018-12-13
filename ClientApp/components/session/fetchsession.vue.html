@@ -1,0 +1,186 @@
+<template>
+	<v-layout row wrap justify-center v-if="$vuetify.breakpoint.smAndUp">
+		<v-flex class="text-xs-center" xs11>
+			<v-menu lazy transition="scale-transition">
+				<v-text-field slot="activator" v-model="dateFormatted" label="Date" append-icon="event" readonly box />
+				<v-date-picker v-model="selecteddate.date" v-on:change="loadSessions" first-day-of-week="1" />
+			</v-menu>
+		</v-flex>
+		<v-flex xs11>
+			<v-card>
+				<v-toolbar flat class="tabletoolbar">
+					<v-flex xs4>
+						<v-toolbar-title>Sessions</v-toolbar-title>
+					</v-flex>
+					<v-flex xs4>
+						<v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details />
+					</v-flex>
+					<v-flex xs4 class="text-xs-right">
+						<v-btn flat color="accent" v-on:click.native="createSession">Create</v-btn>
+					</v-flex>
+				</v-toolbar>
+				<v-data-table :headers="headers" :items="sessions" :search="search" :loading="loading" item-key="id" expand>
+					<v-progress-linear slot="progress" color="primary" indeterminate />
+					<template slot="items" slot-scope="props">
+						<tr @click="props.expanded = !props.expanded">
+							<td><font v-bind:style="{ color: stateColour(props.item.state) }">{{ props.item.site }}</font></td>
+							<td>{{ props.item.time }}</td>
+							<td>{{ props.item.lod }}</td>
+							<td>{{ props.item.staffCount }}</td>
+						</tr>
+					</template>
+					<template slot="expand" slot-scope="props">
+						<v-card flat>
+							<v-layout full-width v-if="props.item.employees.length > 0">
+								<table>
+									<thead>
+										<tr>
+											<th class="text-xs-left" v-for="employee in props.item.employees">{{ employee.employeeRole }} </th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td v-for="employee in props.item.employees">{{ employee.employeeName }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</v-layout>
+							<v-layout justify-center>
+								<v-btn flat color="accent" v-on:click.native="openNote(props.item)">Note</v-btn>
+								<v-btn flat color="accent" v-on:click.native="rosterSession(props.item.id)">Roster</v-btn>
+								<v-btn flat color="accent" v-on:click.native="editSession(props.item)">Edit</v-btn>
+								<v-btn flat color="accent" v-on:click.native="openDelete(props.item)">Delete</v-btn>
+							</v-layout>
+						</v-card>
+					</template>
+				</v-data-table>
+			</v-card>
+		</v-flex>
+		<v-dialog v-model="notedialog" max-width="500" justify-end>
+			<v-card>
+				<v-card-title class="headline" primary-title>Session Note</v-card-title>
+				<v-card-text>{{ selected.note }}</v-card-text>
+				<v-card-actions>
+					<v-spacer />
+					<v-btn color="primary" flat @click="notedialog = false">OK</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+		<v-dialog v-model="deletedialog" max-width="290">
+			<v-card>
+				<v-card-title class="headline">
+					Delete session?
+				</v-card-title>
+				<v-card-text>Are you sure you want to delete this session?</v-card-text>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+					<v-btn color="primary" flat @click.native="deletedialog = false">Cancel</v-btn>
+					<v-btn color="primary" flat v-on:click.native="deleteSession">Accept</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+		<v-snackbar v-model="failed" color="error">{{ errorMessage }}<v-btn dark flat @click="failed = false">Close</v-btn></v-snackbar>
+	</v-layout>
+	<v-layout v-else column>
+		<v-toolbar flat color="transparent">
+			<v-toolbar-title>Sessions</v-toolbar-title>
+			<v-spacer></v-spacer>
+			<v-btn flat color="accent" v-on:click.native="createSession">Create</v-btn>
+		</v-toolbar>
+		<v-menu lazy transition="scale-transition" full-width>
+			<v-text-field slot="activator" v-model="dateFormatted" label="Date" append-icon="event" readonly box />
+			<v-date-picker v-model="selecteddate.date" v-on:change="loadSessions" first-day-of-week="1" full-width />
+		</v-menu>
+		<v-text-field class="mb-4" v-model="search" append-icon="search" label="Search" single-line hide-details box />
+		<v-data-iterator :items="sessions" :search="search" :loading="loading" row wrap>
+			<v-flex slot="item" slot-scope="props" class="mb-4" xs12>
+				<v-card>
+					<v-card-title>
+						<span class="subheading font-weight-bold">{{ props.item.site }}</span>
+						<v-spacer />
+						<v-menu left>
+							<v-btn slot="activator" icon class="ma-0">
+								<v-icon>more_vert</v-icon>
+							</v-btn>
+							<v-list>
+								<v-list-tile v-on:click.native="openNote(props.item)">
+									<v-list-tile-title>Note</v-list-tile-title>
+
+								</v-list-tile>
+								<v-list-tile v-on:click.native="rosterSession(props.item.id)">
+									<v-list-tile-title>Roster</v-list-tile-title>
+								</v-list-tile>
+								<v-list-tile v-on:click.native="openView(props.item)">
+									<v-list-tile-title>View</v-list-tile-title>
+
+								</v-list-tile>
+								<v-list-tile v-on:click.native="editSession(props.item)">
+									<v-list-tile-title>Edit</v-list-tile-title>
+								</v-list-tile>
+								<v-list-tile v-on:click.native="openDelete(props.item)">
+									<v-list-tile-title>Delete</v-list-tile-title>
+								</v-list-tile>
+							</v-list>
+						</v-menu>
+					</v-card-title>
+					<v-divider class="ma-0" />
+					<v-list dense>
+						<v-list-tile>
+							<v-list-tile-content>Clinic Time:</v-list-tile-content>
+							<v-list-tile-content class="align-end">{{ props.item.time }}</v-list-tile-content>
+						</v-list-tile>
+						<v-list-tile>
+							<v-list-tile-content>Length of Day:</v-list-tile-content>
+							<v-list-tile-content class="align-end">{{ props.item.lod }}</v-list-tile-content>
+						</v-list-tile>
+						<v-list-tile>
+							<v-list-tile-content>Staff Count:</v-list-tile-content>
+							<v-list-tile-content class="align-end">{{ props.item.staffCount }}</v-list-tile-content>
+						</v-list-tile>
+					</v-list>
+				</v-card>
+			</v-flex>
+		</v-data-iterator>
+		<v-dialog v-model="notedialog">
+			<v-card>
+				<v-card-title class="headline" primary-title>Session Note</v-card-title>
+				<v-card-text>{{ selected.note }}</v-card-text>
+				<v-card-actions>
+					<v-spacer />
+					<v-btn color="primary" flat @click="notedialog = false">OK</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+		<v-dialog v-model="viewdialog">
+			<v-card>
+				<v-card-title class="headline" primary-title>Employees</v-card-title>
+				<v-list dense>
+					<v-list-tile v-for="employee in selected.employees" :key="employee.employeeId">
+						<v-list-tile-content>{{ employee.employeeRole }}:</v-list-tile-content>
+						<v-list-tile-content class="align-end">{{ employee.employeeName }}</v-list-tile-content>
+					</v-list-tile>
+				</v-list>
+				<v-card-actions>
+					<v-spacer />
+					<v-btn color="primary" flat @click="viewdialog = false">OK</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+		<v-dialog v-model="deletedialog" max-width="290">
+			<v-card>
+				<v-card-title class="headline">
+					Delete session?
+				</v-card-title>
+				<v-card-text>Are you sure you want to delete this session?</v-card-text>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+					<v-btn color="primary" flat @click.native="deletedialog = false">Cancel</v-btn>
+					<v-btn color="primary" flat v-on:click.native="deleteSession">Accept</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+		<v-snackbar v-model="failed" color="error">{{ errorMessage }}<v-btn dark flat @click="failed = false">Close</v-btn></v-snackbar>
+	</v-layout>
+</template>
+
+<script src="./fetchsession.ts"></script>

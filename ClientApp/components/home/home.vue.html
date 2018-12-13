@@ -1,0 +1,21 @@
+<template>
+	<v-layout column align-center>
+		<v-flex>
+			<svg viewBox="0 0 256 221">
+				<g>
+					<path d="M204.8,0 L256,0 L128,220.8 L0,0 L50.56,0 L97.92,0 L128,51.2 L157.44,0 L204.8,0 Z" :fill="getFill()"></path>
+					<path d="M0,0 L128,220.8 L256,0 L204.8,0 L128,132.48 L50.56,0 L0,0 Z" :fill="getOuterFill()" />
+				</g>
+			</svg>
+			<p class="title primary--text text-xs-center">RosterWebApp</p>
+			<p>Welcome to your new rostering web application, built with:</p>
+			<ul>
+				<li><a href="https://get.asp.net/">ASP.NET2 Core </a> and <a href="https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx">C#</a> for cross-platform server-side code</li>
+				<li><a href="https://vuejs.org/">Vue.js</a> and <a href="http://www.typescriptlang.org/">TypeScript</a> for client-side code</li>
+				<li><a href="https://webpack.github.io/">Webpack</a> for building and bundling client-side resources</li>
+				<li><a href="https://vuetifyjs.com/">Vuetify</a> for layout and styling</li>
+			</ul>
+		</v-flex>
+	</v-layout>
+</template>
+<script src="./home.ts"></script>

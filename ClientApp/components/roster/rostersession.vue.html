@@ -1,0 +1,152 @@
+﻿<template>
+	<v-container grid-list-xl text-xs-center>
+		<p class="display-1">{{ after.day }} - {{ after.date }}</p>
+		<v-layout row wrap>
+			<v-flex sm3 xs12>
+				<v-text-field box v-model="after.time" label="Time" disabled />
+			</v-flex>
+			<v-flex sm3 xs12>
+				<v-text-field box v-model="after.site" label="Site" disabled />
+			</v-flex>
+			<v-flex sm3 xs12>
+				<v-text-field box v-model="after.lod" label="Length of day" :rules="[rules.required, rules.decimal]" />
+			</v-flex>
+		</v-layout>
+		<v-text-field box v-model="after.note" label="Session Note"></v-text-field>
+		<v-layout>
+		</v-layout>
+		<v-form ref="form" lazy-validation v-if="!holiday">
+			<p class="display-1">Roster</p>
+			<v-layout justify-center>
+				<v-flex md6 sm8 xs10>
+					<v-select box v-model="team" :items="teams" label="Team" item-text="name" return-object v-on:change="setTeam" />
+				</v-flex>
+			</v-layout>
+			<transition-group name="fade" mode="out-in">
+				<v-layout justify-center row wrap v-for="(manager, i) in sessionmanagers" :key="manager.employeeRole+i">
+					<v-flex sm4 xs12>
+						<v-select box v-model="manager.employeeId" :items="managers" label="Manager" item-text="name" item-value="id" />
+					</v-flex>
+					<v-flex sm4 xs12>
+						<v-text-field box v-model="manager.employeeLOD" label="LOD" :rules="[rules.decimal]" maxlength="5" />
+					</v-flex>
+					<v-flex sm4 xs12>
+						<v-text-field box v-model="manager.employeeOT" label="OT" :rules="[rules.decimal]" maxlength="5" />
+					</v-flex>
+				</v-layout>
+			</transition-group>
+			<v-btn flat icon color="accent" v-on:click="addManager" class="mb-4">
+				<v-icon>add</v-icon>
+			</v-btn>
+			<v-btn flat icon color="accent" v-on:click="removeManager" class="mb-4">
+				<v-icon>remove</v-icon>
+			</v-btn>
+			<transition-group name="fade" mode="out-in">
+				<v-layout justify-center row wrap v-for="(supervisor, i) in sessionsupervisors" :key="supervisor.employeeRole+i">
+					<v-flex sm4 xs12>
+						<v-select box v-model="supervisor.employeeId" :items="supervisors" label="Supervisor" item-text="name" item-value="id" />
+					</v-flex>
+					<v-flex sm4 xs12>
+						<v-text-field box v-model="supervisor.employeeLOD" label="LOD" :rules="[rules.decimal]" maxlength="5" />
+					</v-flex>
+					<v-flex sm4 xs12>
+						<v-text-field box v-model="supervisor.employeeOT" label="OT" :rules="[rules.decimal]" maxlength="5" />
+					</v-flex>
+				</v-layout>
+			</transition-group>
+			<v-btn flat icon color="accent" v-on:click="addSupervisor" class="mb-4">
+				<v-icon>add</v-icon>
+			</v-btn>
+			<v-btn flat icon color="accent" v-on:click="removeSupervisor" class="mb-4">
+				<v-icon>remove</v-icon>
+			</v-btn>
+			<transition-group name="fade" mode="out-in">
+				<v-layout justify-center row wrap v-for="(agent, i) in sessionagents" :key="agent.employeeRole+i">
+					<v-flex sm4 xs12>
+						<v-select box v-model="agent.employeeId" :items="agents" label="Agent" item-text="name" item-value="id" />
+					</v-flex>
+					<v-flex sm4 xs12>
+						<v-text-field box v-model="agent.employeeLOD" label="LOD" :rules="[rules.decimal]" maxlength="5" />
+					</v-flex>
+					<v-flex sm4 xs12>
+						<v-text-field box v-model="agent.employeeOT" label="OT" :rules="[rules.decimal]" maxlength="5" />
+					</v-flex>
+				</v-layout>
+			</transition-group>
+			<v-btn flat icon color="accent" v-on:click="addAgent" class="mb-4">
+				<v-icon>add</v-icon>
+			</v-btn>
+			<v-btn flat icon color="accent" v-on:click="removeAgent" class="mb-4">
+				<v-icon>remove</v-icon>
+			</v-btn>
+		</v-form>
+		<v-form ref="form" lazy-validation v-if="holiday">
+			<p class="display-1">Roster</p>
+			<v-layout justify-center>
+				<v-flex md6 sm8 xs10>
+					<v-select box v-model="team" :items="teams" label="Team" item-text="name" return-object v-on:change="setTeam" />
+				</v-flex>
+			</v-layout>
+			<transition-group name="fade" mode="out-in">
+				<v-layout justify-center row wrap v-for="(manager, i) in sessionmanagers" :key="manager.employeeRole+i">
+					<v-flex sm6 xs12>
+						<v-select box v-model="manager.employeeId" :items="managers" label="Manager" item-text="name" item-value="id" />
+					</v-flex>
+					<v-flex sm6 xs12>
+						<v-text-field box v-model="manager.employeeLOD" label="LOD" :rules="[rules.decimal]" maxlength="5" />
+					</v-flex>
+				</v-layout>
+			</transition-group>
+			<v-btn flat icon color="accent" v-on:click="addManager" class="mb-4">
+				<v-icon>add</v-icon>
+			</v-btn>
+			<v-btn flat icon color="accent" v-on:click="removeManager" class="mb-4">
+				<v-icon>remove</v-icon>
+			</v-btn>
+			<transition-group name="fade" mode="out-in">
+				<v-layout justify-center row wrap v-for="(supervisor, i) in sessionsupervisors" :key="supervisor.employeeRole+i">
+					<v-flex sm6 xs12>
+						<v-select box v-model="supervisor.employeeId" :items="supervisors" label="Supervisor" item-text="name" item-value="id" />
+					</v-flex>
+					<v-flex sm6 xs12>
+						<v-text-field box v-model="supervisor.employeeLOD" label="LOD" :rules="[rules.decimal]" maxlength="5" />
+					</v-flex>
+				</v-layout>
+			</transition-group>
+			<v-btn flat icon color="accent" v-on:click="addSupervisor" class="mb-4">
+				<v-icon>add</v-icon>
+			</v-btn>
+			<v-btn flat icon color="accent" v-on:click="removeSupervisor" class="mb-4">
+				<v-icon>remove</v-icon>
+			</v-btn>
+			<transition-group name="fade" mode="out-in">
+				<v-layout justify-center row wrap v-for="(agent, i) in sessionagents" :key="agent.employeeRole+i">
+					<v-flex sm6 xs12>
+						<v-select box v-model="agent.employeeId" :items="agents" label="Agent" item-text="name" item-value="id" />
+					</v-flex>
+					<v-flex sm6 xs12>
+						<v-text-field box v-model="agent.employeeLOD" label="LOD" :rules="[rules.decimal]" maxlength="5" />
+					</v-flex>
+				</v-layout>
+			</transition-group>
+			<v-btn flat icon color="accent" v-on:click="addAgent" class="mb-4">
+				<v-icon>add</v-icon>
+			</v-btn>
+			<v-btn flat icon color="accent" v-on:click="removeAgent" class="mb-4">
+				<v-icon>remove</v-icon>
+			</v-btn>
+		</v-form>
+		<v-layout justify-center>
+			<v-btn color="accent" v-on:click="rosterSession" :disabled="loading">Submit</v-btn>
+			<v-btn color="accent" v-on:click="clear" :disabled="loading">Clear</v-btn>
+			<v-btn color="accent" v-on:click="cancel" :disabled="loading">Cancel</v-btn>
+		</v-layout>
+		<v-progress-circular v-if="loading" indeterminate />
+		<v-snackbar v-model="failed" color="error">
+			{{ errorMessage }}
+			<v-btn dark flat @click="failed = false">Close</v-btn>
+		</v-snackbar>
+	</v-container>
+</template>
+
+<script src="./rostersession.ts"></script>

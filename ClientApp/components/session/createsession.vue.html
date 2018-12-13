@@ -1,0 +1,22 @@
+﻿<template>
+	<v-layout justify-center text-xs-center>
+		<v-flex lg4 md6 sm8 xs12>
+			<v-form ref="form" lazy-validation>
+				<p class="title">Create Session</p>
+				<v-menu lazy transition="scale-transition" full-width min-width="290px">
+					<v-text-field slot="activator" v-model="dateFormatted" label="Date" append-icon="event" :rules="[rules.required]" readonly box></v-text-field>
+					<v-date-picker v-model="session.date" v-on:change="formatDate" first-day-of-week="1"></v-date-picker>
+				</v-menu>
+				<v-select v-model="session.site" :items="sites" label="Site" name="session.site" item-text="name" v-on:change="loadTimes(session.site)" :rules="[rules.required]" box/>
+				<v-select v-model="session.time" :items="times" label="Time" :rules="[rules.required]" box/>
+				<v-text-field v-model="session.lod" label="Length of day" :rules="[rules.required, rules.decimal]" maxlength="5" box/>
+				<v-btn color="accent" v-on:click="createSession">Submit</v-btn>
+				<v-btn color="accent" v-on:click="clear">Clear</v-btn>
+				<v-btn color="accent" v-on:click="cancel">Cancel</v-btn>
+				<v-snackbar v-model="failed" color="error">Failed to create session!<v-btn dark flat @click="failed = false">Close</v-btn></v-snackbar>
+			</v-form>
+		</v-flex>
+	</v-layout>
+</template>
+
+<script src="./createsession.ts"></script>

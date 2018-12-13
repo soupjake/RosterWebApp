@@ -1,0 +1,20 @@
+﻿<template>
+	<v-layout justify-center text-xs-center>
+		<v-flex lg4 md6 sm8 xs12>
+			<v-form ref="form" lazy-validation v-if="!loading">
+				<p class="title">Edit Employee</p>
+				<v-text-field v-model="employee.id" label="Id" :rules="[rules.required, rules.number]" maxlength="8" disabled box/>
+				<v-text-field v-model="employee.name" label="Name" :rules="[rules.required]" disabled box/>
+				<v-select v-model="employee.role" :items="roles" label="Role" :rules="[rules.required]" disabled box/>
+				<v-text-field v-model="employee.contractHours" label="Contract Hours" :rules="[rules.required, rules.decimal]" maxlength="5" box/>
+				<v-select v-model="workpattern" :items="days" label="Work Pattern" :rules="[rules.required]" multiple chips box></v-select>
+				<v-btn color="accent" v-on:click="editEmployee">Submit</v-btn>
+				<v-btn color="accent" v-on:click="cancel">Cancel</v-btn>
+				<v-snackbar v-model="failed" color="error">Failed to edit employee!<v-btn dark flat @click="failed = false">Close</v-btn></v-snackbar>
+			</v-form>
+			<v-progress-circular v-else color="primary" indeterminate />
+		</v-flex>
+	</v-layout>
+</template>
+
+<script src="./editemployee.ts"></script>

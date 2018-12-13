@@ -1,0 +1,27 @@
+﻿<template>
+	<v-layout justify-center text-xs-center>
+		<v-flex lg4 md6 sm8 xs12>
+			<v-form ref="form" lazy-validation>
+				<p class="title">Create Absence</p>
+				<v-text-field v-model="absence.employeeId" label="Staff Id" :rules="[rules.required, rules.number]" append-icon="search" @click:append="search" maxlength="8" :disabled="iddisable" box />
+				<v-text-field v-model="absence.employeeName" label="Staff Name" :loading="loading" :rules="[rules.required]" disabled box />
+				<v-select v-model="absence.type" :items="types" label="Type" :rules="[rules.required]" box />
+				<v-menu lazy transition="scale-transition" full-width min-width="290px">
+					<v-text-field slot="activator" v-model="startDateFormatted" label="Start date" append-icon="event" :rules="[rules.required]" readonly box />
+					<v-date-picker v-model="absence.startDate" v-on:change="formatStartDate" first-day-of-week="1" />
+				</v-menu>
+				<v-menu lazy transition="scale-transition" full-width min-width="290px">
+					<v-text-field slot="activator" v-model="endDateFormatted" label="End date" append-icon="event" :rules="[rules.required]" readonly box />
+					<v-date-picker v-model="absence.endDate" v-on:change="formatEndDate" first-day-of-week="1" />
+				</v-menu>
+				<v-text-field v-model="absence.hours" label="Hours" :rules="[rules.required, rules.decimal]" maxlength="5" box />
+				<v-btn color="accent" v-on:click="createAbsence">Submit</v-btn>
+				<v-btn color="accent" v-on:click="clear">Clear</v-btn>
+				<v-btn color="accent" v-on:click="cancel">Cancel</v-btn>
+				<v-snackbar v-model="failed" color="error">Failed to create absence!<v-btn dark flat @click="failed = false">Close</v-btn></v-snackbar>
+			</v-form>
+		</v-flex>
+	</v-layout>
+</template>
+
+<script src="./createabsence.ts"></script>

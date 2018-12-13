@@ -1,0 +1,60 @@
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+a {
+	color: inherit !important;
+	text-decoration: none !important;
+}
+
+.theme--light.v-toolbar.tabletoolbar {
+	background-color: white !important;
+}
+
+.theme--dark.v-toolbar.tabletoolbar {
+	background-color: #424242 !important;
+}
+
+.fade-enter, .fade-leave-to {
+	max-height: 0px;
+	opacity: 0;
+}
+
+.fade-enter-to, .fade-leave {
+	max-height: 500px;
+	opacity: 1;
+}
+
+.fade-enter-active, .fade-leave-active {
+	transition: opacity 0.2s cubic-bezier(0.4, 0.0, 0.2, 1), max-height 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+@media print {
+	.container.fluid {
+		padding: 0;
+		margin: 0;
+	}
+
+	.v-toolbar {
+		display: none;
+	}
+
+	.v-datatable__actions {
+		height: 0;
+		visibility: hidden;
+	}
+
+	aside[style] {
+		display: none !important;
+		width: 0px !important;
+	}
+
+	main[style] {
+		padding: 64px 0px 32px 0px !important;
+	}
+
+	span {
+		display: none;
+	}
+}

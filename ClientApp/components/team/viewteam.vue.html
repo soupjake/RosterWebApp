@@ -1,0 +1,69 @@
+<template>
+	<v-layout row wrap justify-center v-if="$vuetify.breakpoint.smAndUp">
+		<v-flex class="text-xs-center" xs11>
+			<v-menu lazy transition="scale-transition">
+				<v-text-field slot="activator" v-model="startDateFormatted" label="Start date" append-icon="event" readonly box />
+				<v-date-picker v-model="startdate" v-on:change="loadSessions" first-day-of-week="1" />
+			</v-menu>
+			<v-menu lazy transition="scale-transition">
+				<v-text-field slot="activator" v-model="endDateFormatted" label="End date" append-icon="event" readonly box />
+				<v-date-picker v-model="enddate" v-on:change="loadSessions" first-day-of-week="1" />
+			</v-menu>
+		</v-flex>
+		<v-flex xs11>
+			<v-card>
+				<v-toolbar flat class="tabletoolbar">
+					<v-flex>
+						<v-toolbar-title>{{ team.name }}</v-toolbar-title>
+					</v-flex>
+					<v-flex>
+						<v-spacer></v-spacer>
+					</v-flex>
+					<v-flex>
+						<v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details />
+					</v-flex>
+				</v-toolbar>
+				<v-data-table :headers="headers" :items="teamsites" :search="search" :loading="loading" item-key="id" expand>
+					<v-progress-linear slot="progress" color="primary" indeterminate />
+					<template slot="items" slot-scope="props">
+						<td>{{ dateFormat(props.item.date) }}</td>
+						<td>{{ props.item.day }}</td>
+						<td v-for="member in props.item.members"><font v-bind:style="{ color: siteColour(member.sessionSite) }">{{ member.sessionSite }}</font></td>
+					</template>
+				</v-data-table>
+				<v-snackbar v-model="failed" color="error">Please enter valid dates!<v-btn dark flat @click="failed = false">Close</v-btn></v-snackbar>
+			</v-card>
+		</v-flex>
+	</v-layout>
+	<v-layout v-else column>
+		<p class="title text-xs-center">{{ team.name }}</p>
+		<v-menu lazy transition="scale-transition" full-width>
+			<v-text-field slot="activator" v-model="startDateFormatted" label="Start date" append-icon="event" readonly box />
+			<v-date-picker v-model="startdate" v-on:change="loadSessions" first-day-of-week="1" full-width />
+		</v-menu>
+		<v-menu lazy transition="scale-transition" full-width>
+			<v-text-field slot="activator" v-model="endDateFormatted" label="End date" append-icon="event" readonly box />
+			<v-date-picker v-model="enddate" v-on:change="loadSessions" first-day-of-week="1" full-width />
+		</v-menu>
+		<v-text-field class="mb-4" v-model="search" append-icon="search" label="Search" single-line hide-details box />
+		<v-data-iterator :items="teamsites" :search="search" :loading="loading" row wrap>
+			<v-flex slot="item" slot-scope="props" class="mb-4" xs12>
+				<v-card>
+					<v-card-title>
+						<h4>{{ props.item.date }} - {{ props.item.day }}</h4>
+					</v-card-title>
+					<v-divider class="ma-0" />
+					<v-list dense>
+						<v-list-tile v-for="member in props.item.members">
+							<v-list-tile-content>{{ member.employeeName }}:</v-list-tile-content>
+							<v-list-tile-content class="align-end"><font v-bind:style="{ color: siteColour(member.sessionSite) }">{{ member.sessionSite }}</font></v-list-tile-content>
+						</v-list-tile>
+					</v-list>
+				</v-card>
+			</v-flex>
+		</v-data-iterator>
+		<v-snackbar v-model="failed" color="error">Please enter valid dates!<v-btn dark flat @click="failed = false">Close</v-btn></v-snackbar>
+	</v-layout>
+</template>
+
+<script src="./viewteam.ts"></script>

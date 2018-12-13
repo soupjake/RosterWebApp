@@ -1,0 +1,130 @@
+<template>
+	<v-layout row wrap justify-center v-if="$vuetify.breakpoint.smAndUp">
+		<v-flex class="text-xs-center" xs11>
+			<v-menu lazy transition="scale-transition">
+				<v-text-field slot="activator" v-model="dateFormatted" label="Date" append-icon="event" readonly box />
+				<v-date-picker v-model="selecteddate.date" v-on:change="loadAbsences" first-day-of-week="1" />
+			</v-menu>
+		</v-flex>
+		<v-flex xs11>
+			<v-card>
+				<v-toolbar flat class="tabletoolbar">
+					<v-flex xs4>
+						<v-toolbar-title>Absences</v-toolbar-title>
+					</v-flex>
+					<v-flex xs4>
+						<v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details />
+					</v-flex>
+					<v-flex xs4 class="text-xs-right">
+						<v-btn flat color="accent" v-on:click.native="createAbsence">Create</v-btn>
+					</v-flex>
+				</v-toolbar>
+				<v-data-table :headers="headers" :items="absences" :search="search" :loading="loading" item-key="id" expand>
+					<v-progress-linear slot="progress" color="primary" indeterminate />
+					<template slot="items" slot-scope="props">
+						<tr @click="props.expanded = !props.expanded">
+							<td>{{ props.item.employeeId }}</td>
+							<td>{{ props.item.employeeName }}</td>
+							<td><font v-bind:style="{ color: typeColour(props.item.type) }">{{ props.item.type }}</font></td>
+							<td>{{ dateFormat(props.item.startDate) }}</td>
+							<td>{{ dateFormat(props.item.endDate) }}</td>
+							<td>{{ props.item.hours }}</td>
+						</tr>
+					</template>
+					<template slot="expand" slot-scope="props">
+						<v-card flat="flat">
+							<v-layout justify-center>
+								<v-btn color="accent" flat v-on:click.native="editAbsence(props.item.id)">Edit</v-btn>
+								<v-btn color="accent" flat v-on:click.native="openDelete(props.item)">Delete</v-btn>
+							</v-layout>
+						</v-card>
+					</template>
+				</v-data-table>
+			</v-card>
+			<v-dialog v-model="dialog" max-width="290">
+				<v-card>
+					<v-card-title class="headline">
+						Delete absence?
+					</v-card-title>
+					<v-card-text>Are you sure you want to delete this absence?</v-card-text>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn color="primary" flat @click.native="dialog = false">Cancel</v-btn>
+						<v-btn color="primary" flat v-on:click.native="deleteAbsence">Accept</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+			<v-snackbar v-model="failed" color="error">Failed to delete absence!<v-btn dark flat @click="failed = false">Close</v-btn></v-snackbar>
+		</v-flex>
+	</v-layout>
+	<v-layout v-else column>
+		<v-toolbar flat color="transparent">
+			<v-toolbar-title>Absences</v-toolbar-title>
+			<v-spacer></v-spacer>
+			<v-btn flat color="accent" v-on:click.native="createAbsence">Create</v-btn>
+		</v-toolbar>
+		<v-menu lazy transition="scale-transition" full-width>
+			<v-text-field slot="activator" v-model="dateFormatted" label="Date" append-icon="event" readonly box />
+			<v-date-picker v-model="selecteddate.date" v-on:change="loadAbsences" first-day-of-week="1" full-width />
+		</v-menu>
+		<v-text-field class="mb-4" v-model="search" append-icon="search" label="Search" single-line hide-details box />
+		<v-data-iterator :items="absences" :search="search" :loading="loading" row wrap>
+			<v-flex slot="item" slot-scope="props" class="mb-4" xs12>
+				<v-card>
+					<v-card-title>
+						<span class="subheading font-weight-bold">{{ props.item.employeeId }} - {{ props.item.employeeName }}</span>
+						<v-spacer />
+						<v-menu left>
+							<v-btn slot="activator" icon class="ma-0">
+								<v-icon>more_vert</v-icon>
+							</v-btn>
+							<v-list>
+								<v-list-tile v-on:click.native="editAbsence(props.item.id)">
+									<v-list-tile-title>Edit</v-list-tile-title>
+								</v-list-tile>
+								<v-list-tile v-on:click.native="openDelete(props.item)">
+									<v-list-tile-title>Delete</v-list-tile-title>
+								</v-list-tile>
+							</v-list>
+						</v-menu>
+					</v-card-title>
+					<v-divider class="ma-0" />
+					<v-list dense>
+						<v-list-tile>
+							<v-list-tile-content>Type:</v-list-tile-content>
+							<v-list-tile-content class="align-end"><font v-bind:style="{ color: typeColour(props.item.type) }">{{ props.item.type }}</font></v-list-tile-content>
+						</v-list-tile>
+						<v-list-tile>
+							<v-list-tile-content>Start Date:</v-list-tile-content>
+							<v-list-tile-content class="align-end">{{ props.item.startDate }}</v-list-tile-content>
+						</v-list-tile>
+						<v-list-tile>
+							<v-list-tile-content>End Date:</v-list-tile-content>
+							<v-list-tile-content class="align-end">{{ props.item.endDate }}</v-list-tile-content>
+						</v-list-tile>
+						<v-list-tile>
+							<v-list-tile-content>Hours:</v-list-tile-content>
+							<v-list-tile-content class="align-end">{{ props.item.hours }}</v-list-tile-content>
+						</v-list-tile>
+					</v-list>
+				</v-card>
+			</v-flex>
+		</v-data-iterator>
+		<v-dialog v-model="dialog" max-width="290">
+			<v-card>
+				<v-card-title class="headline">
+					Delete absence?
+				</v-card-title>
+				<v-card-text>Are you sure you want to delete this absence?</v-card-text>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+					<v-btn color="primary" flat @click.native="dialog = false">Cancel</v-btn>
+					<v-btn color="primary" flat v-on:click.native="deleteAbsence">Accept</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+		<v-snackbar v-model="failed" color="error">Failed to delete absence!<v-btn dark flat @click="failed = false">Close</v-btn></v-snackbar>
+	</v-layout>
+</template>
+
+<script src="./fetchabsence.ts"></script>

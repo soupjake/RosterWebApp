@@ -1,0 +1,20 @@
+﻿<template>
+	<v-layout justify-center text-xs-center>
+		<v-flex lg4 md6 sm8 xs12>
+			<v-form ref="form" lazy-validation>
+				<p class="title">Create Employee</p>
+				<v-text-field height="10" v-model="employee.id" label="Id" :rules="[rules.required, rules.number]" maxlength="8" box/>
+				<v-text-field v-model="employee.name" label="Name" :rules="[rules.required]" box/>
+				<v-select v-model="employee.role" :items="roles" label="Role" :rules="[rules.required]" box/>
+				<v-text-field v-model="employee.contractHours" label="Contract Hours" :rules="[rules.required, rules.decimal]" maxlength="5" box/>
+				<v-select v-model="workpattern" :items="days" label="Work Pattern" multiple chips box></v-select>
+				<v-btn color="accent" v-on:click="createEmployee">Submit</v-btn>
+				<v-btn color="accent" v-on:click="clear">Clear</v-btn>
+				<v-btn color="accent" v-on:click="cancel">Cancel</v-btn>
+				<v-snackbar v-model="failed" color="error">Failed to create employee!<v-btn dark flat @click="failed = false">Close</v-btn></v-snackbar>
+			</v-form>
+		</v-flex>
+	</v-layout>
+</template>
+
+<script src="./createemployee.ts"></script>

@@ -1,0 +1,40 @@
+﻿<template>
+	<v-layout justify-center text-xs-center>
+		<v-flex lg4 md6 sm8 xs12>
+			<v-form ref="form" lazy-validation v-if="!loading">
+				<p class="title">Create Team</p>
+				<div>
+					<v-text-field v-model="team.name" label="Name" :rules="[rules.required]" box />
+					<transition-group name="fade" mode="out-in">
+						<v-layout v-for="(manager, i) in teammanagers" :key="manager.employeeRole+i">
+							<v-select box v-model="manager.employeeId" :items="managers" label="Manager" item-text="name" item-value="id" :rules="[rules.required]" />
+						</v-layout>
+					</transition-group>
+					<v-btn flat icon color="accent" v-on:click="addManager" class="mb-4"><v-icon dark>add</v-icon></v-btn>
+					<v-btn flat icon color="accent" v-on:click="removeManager" class="mb-4"><v-icon>remove</v-icon></v-btn>
+					<transition-group name="fade" mode="out-in">
+						<v-layout v-for="(supervisor, i) in teamsupervisors" :key="supervisor.employeeRole+i">
+							<v-select box v-model="supervisor.employeeId" :items="supervisors" label="Supervisor" item-text="name" item-value="id" :rules="[rules.required]" />
+						</v-layout>
+					</transition-group>
+					<v-btn flat icon color="accent" v-on:click="addSupervisor" class="mb-4"><v-icon dark>add</v-icon></v-btn>
+					<v-btn flat icon color="accent" v-on:click="removeSupervisor" class="mb-4"><v-icon>remove</v-icon></v-btn>
+					<transition-group name="fade" mode="out-in">
+						<v-layout v-for="(agent, i) in teamagents" :key="agent.employeeRole+i">
+							<v-select box v-model="agent.employeeId" :items="agents" label="Agent" item-text="name" item-value="id" :rules="[rules.required]" />
+						</v-layout>
+					</transition-group>
+					<v-btn flat icon color="accent" v-on:click="addAgent" class="mb-4"><v-icon dark>add</v-icon></v-btn>
+					<v-btn flat icon color="accent" v-on:click="removeAgent" class="mb-4"><v-icon>remove</v-icon></v-btn>
+				</div>
+				<v-btn color="accent" v-on:click="createTeam">Submit</v-btn>
+				<v-btn color="accent" v-on:click="clear">Clear</v-btn>
+				<v-btn color="accent" v-on:click="cancel">Cancel</v-btn>
+				<v-snackbar v-model="failed" color="error">{{ errorMessage }}<v-btn dark flat @click="failed = false">Close</v-btn></v-snackbar>
+			</v-form>
+			<v-progress-circular v-else color="primary" indeterminate />
+		</v-flex>
+	</v-layout>
+</template>
+
+<script src="./createteam.ts"></script>

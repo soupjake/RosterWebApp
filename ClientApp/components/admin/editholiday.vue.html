@@ -1,0 +1,20 @@
+﻿<template>
+	<v-layout justify-center text-xs-center>
+		<v-flex lg4 md6 sm8 xs12>
+			<v-form ref="form" lazy-validation v-if="!loading">
+				<p class="title">Edit Holiday</p>
+				<v-text-field v-model="holiday.name" label="Name" :rules="[rules.required]" disabled box/>
+				<v-menu lazy transition="scale-transition" full-width min-width="290px">
+					<v-text-field slot="activator" v-model="dateFormatted" label="Date" append-icon="event" :rules="[rules.required]" readonly box></v-text-field>
+					<v-date-picker v-model="holiday.date" v-on:change="formatDate" first-day-of-week="1"></v-date-picker>
+				</v-menu>
+				<v-btn color="accent" v-on:click="editHoliday">Submit</v-btn>
+				<v-btn color="accent" v-on:click="cancel">Cancel</v-btn>
+				<v-snackbar v-model="failed" color="error">Failed to edit special date!<v-btn dark flat @click="failed = false">Close</v-btn></v-snackbar>
+			</v-form>
+			<v-progress-circular v-else color="primary" indeterminate />
+		</v-flex>
+	</v-layout>
+</template>
+
+<script src="./editholiday.ts"></script>
