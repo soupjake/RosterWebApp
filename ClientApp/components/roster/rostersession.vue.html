@@ -2,13 +2,13 @@
 	<v-container grid-list-md text-xs-center>
 		<p class="title">{{ after.day }} - {{ after.date }}</p>
 		<v-layout row wrap>
-			<v-flex sm3 xs12>
+			<v-flex sm4 xs12>
 				<v-text-field box v-model="after.time" label="Time" disabled />
 			</v-flex>
-			<v-flex sm3 xs12>
+			<v-flex sm4 xs12>
 				<v-text-field box v-model="after.site" label="Site" disabled />
 			</v-flex>
-			<v-flex sm3 xs12>
+			<v-flex sm4 xs12>
 				<v-text-field box v-model="after.lod" label="Length of day" :rules="[rules.required, rules.decimal]" />
 			</v-flex>
 		</v-layout>
