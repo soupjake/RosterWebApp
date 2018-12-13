@@ -1,0 +1,88 @@
+CREATE TABLE [dbo].[AbsenceTable] (
+    [Id]           INT           IDENTITY (1, 1) NOT NULL,
+    [EmployeeId]   INT           NOT NULL,
+    [EmployeeName] NVARCHAR (50) NOT NULL,
+    [Type]         NVARCHAR (50) NOT NULL,
+    [StartDate]    NVARCHAR (50) NOT NULL,
+    [EndDate]      NVARCHAR (50) NOT NULL,
+    [Hours]        FLOAT (53)    NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+CREATE TABLE [dbo].[EmployeeTable] (
+    [Id]            INT            NOT NULL,
+    [Name]          NVARCHAR (MAX) NOT NULL,
+    [Role]          NVARCHAR (MAX) NOT NULL,
+    [ContractHours] FLOAT (53)     NOT NULL,
+    [WorkPattern]   NVARCHAR (MAX) NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+CREATE TABLE [dbo].[RosterTable] (
+    [Id]             INT            IDENTITY (1, 1) NOT NULL,
+    [Week]           FLOAT (53)     NOT NULL,
+    [EmployeeId]     INT            NOT NULL,
+    [EmployeeName]   NVARCHAR (MAX) NOT NULL,
+    [Role]           NVARCHAR (MAX) NOT NULL,
+    [ContractHours]  FLOAT (53)     NOT NULL,
+    [AppointedHours] FLOAT (53)     NOT NULL,
+    [AbsenceHours]   FLOAT (53)     NOT NULL,
+    [OvertimeHours]  FLOAT (53)     NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+CREATE TABLE [dbo].[SessionEmployeeTable] (
+    [Id]           INT            IDENTITY (1, 1) NOT NULL,
+    [SessionId]    INT            NOT NULL,
+    [SessionDate]  NVARCHAR (MAX) NOT NULL,
+    [SessionSite]  NVARCHAR (MAX) NOT NULL,
+    [EmployeeId]   INT            NOT NULL,
+    [EmployeeName] NVARCHAR (MAX) NOT NULL,
+    [EmployeeRole] NVARCHAR (MAX) NOT NULL,
+    [EmployeeLOD]  FLOAT (53)     NOT NULL,
+    [EmployeeOT]   FLOAT (53)     NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+CREATE TABLE [dbo].[SessionTable] (
+    [Id]         INT            IDENTITY (1, 1) NOT NULL,
+    [Date]       NVARCHAR (MAX) NOT NULL,
+    [Day]        NVARCHAR (MAX) NOT NULL,
+    [Site]       NVARCHAR (MAX) NOT NULL,
+    [Time]       NVARCHAR (MAX) NOT NULL,
+    [LOD]        FLOAT (53)     NOT NULL,
+    [Holiday]    INT            NOT NULL,
+    [Note]       NVARCHAR (MAX) NOT NULL,
+    [StaffCount] INT            NOT NULL,
+    [State]      INT            NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+CREATE TABLE [dbo].[SiteTable] (
+    [Id]    INT            IDENTITY (1, 1) NOT NULL,
+    [Name]  NVARCHAR (MAX) NOT NULL,
+    [Times] NVARCHAR (MAX) NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+CREATE TABLE [dbo].[HolidayTable] (
+    [Id]   INT           IDENTITY (1, 1) NOT NULL,
+    [Name] NVARCHAR (50) NOT NULL,
+    [Date] NCHAR (10)    NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+CREATE TABLE [dbo].[TeamMemberTable] (
+    [Id]           INT            IDENTITY (1, 1) NOT NULL,
+    [TeamId]       INT            NOT NULL,
+    [EmployeeId]   INT            NOT NULL,
+    [EmployeeName] NVARCHAR (MAX) NOT NULL,
+    [EmployeeRole] NVARCHAR (MAX) NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+CREATE TABLE [dbo].[TeamTable] (
+    [Id]   INT           IDENTITY (1, 1) NOT NULL,
+    [Name] NVARCHAR (50) NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
