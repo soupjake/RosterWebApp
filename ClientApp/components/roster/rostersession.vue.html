@@ -1,6 +1,6 @@
-﻿<template>
-	<v-container grid-list-xl text-xs-center>
-		<p class="display-1">{{ after.day }} - {{ after.date }}</p>
+<template>
+	<v-container grid-list-md text-xs-center>
+		<p class="title">{{ after.day }} - {{ after.date }}</p>
 		<v-layout row wrap>
 			<v-flex sm3 xs12>
 				<v-text-field box v-model="after.time" label="Time" disabled />
@@ -12,13 +12,15 @@
 				<v-text-field box v-model="after.lod" label="Length of day" :rules="[rules.required, rules.decimal]" />
 			</v-flex>
 		</v-layout>
-		<v-text-field box v-model="after.note" label="Session Note"></v-text-field>
-		<v-layout>
+		<v-layout justify-center>
+			<v-flex md6 sm8 xs12>
+				<v-text-field box v-model="after.note" label="Session Note"></v-text-field>
+			</v-flex>
 		</v-layout>
 		<v-form ref="form" lazy-validation v-if="!holiday">
-			<p class="display-1">Roster</p>
+			<p class="title">Roster</p>
 			<v-layout justify-center>
-				<v-flex md6 sm8 xs10>
+				<v-flex md6 sm8 xs12>
 					<v-select box v-model="team" :items="teams" label="Team" item-text="name" return-object v-on:change="setTeam" />
 				</v-flex>
 			</v-layout>
