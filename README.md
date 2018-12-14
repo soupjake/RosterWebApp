@@ -52,7 +52,7 @@ The main function of the app is the ability to assign employees to a session and
 
 ![](demoimages/rosterdemo.gif)
 
-The app is programmed so that an employee can only be rostered to a session if their work pattern (e.g. "Mon,Tue,Wed") contains the session's day of the week and if they don't have an absence on that day. Overtime hours relate to how many of the appointed hours are overtime. If the session is created either on a weekend or on a holiday date (initial holiday dates are Christmas and Boxing Day 2018 & 2019) then all hours are counted as overtime hours and so the overtime hours field is not needed.
+The app is programmed so that an employee can only be rostered to a session if their work pattern (e.g. "Mon,Tue,Wed") contains the session's day of the week and if they don't have an absence on that day. Overtime hours relate to how many of the appointed hours are overtime. If the session is created either on a weekend or on a holiday date (initial holiday dates are Christmas and Boxing Day 2018 & 2019) then all hours are counted as overtime hours and so the overtime hours field is not rendered.
 
 ### View Employee 
 
