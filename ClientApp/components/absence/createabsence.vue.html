@@ -18,7 +18,7 @@
 				<v-btn color="accent" v-on:click="createAbsence">Submit</v-btn>
 				<v-btn color="accent" v-on:click="clear">Clear</v-btn>
 				<v-btn color="accent" v-on:click="cancel">Cancel</v-btn>
-				<v-snackbar v-model="failed" color="error">Failed to create absence!<v-btn dark flat @click="failed = false">Close</v-btn></v-snackbar>
+				<v-snackbar v-model="failed" color="error">{{ errormessage }}<v-btn dark flat @click="failed = false">Close</v-btn></v-snackbar>
 			</v-form>
 		</v-flex>
 	</v-layout>
