@@ -39,6 +39,10 @@ a {
 	.v-toolbar {
 		display: none;
 	}
+	
+	.v-card {
+		box-shadow: unset !important;
+	}
 
 	.v-datatable__actions {
 		height: 0;
