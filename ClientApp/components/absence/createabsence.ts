@@ -1,4 +1,4 @@
-﻿import Vue from 'vue';
+import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { Absence } from '../../models/absence';
 import { Employee } from '../../models/employee';
@@ -30,6 +30,7 @@ export default class CreateAbsenceComponent extends Vue {
 	iddisable: boolean = false;
 	loading: boolean = false;
 	failed: boolean = false;
+	errormessage: string = "";
 	types: string[] = ["Day Off", "Annual Leave", "Sick Leave", "Special Leave", "Training"];
 	partDays: string[] = ["Yes", "No"];
 
@@ -44,6 +45,7 @@ export default class CreateAbsenceComponent extends Vue {
 					.then(response => response.json() as Promise<number>)
 					.then(data => {
 						if (data < 1) {
+							this.errormessage = "Failed to create absence!";
 							this.failed = true;
 						} else {
 							this.$router.push('/fetchabsence');
@@ -56,6 +58,7 @@ export default class CreateAbsenceComponent extends Vue {
 	}
 
 	search() {
+		this.failed = false;
 		this.loading = true;
 		fetch('api/Employee/GetById?id=' + this.absence.employeeId)
 			.then(response => response.json() as Promise<Employee>)
@@ -65,7 +68,8 @@ export default class CreateAbsenceComponent extends Vue {
 					this.iddisable = true;
 					this.loading = false;
 				} else {
-					alert("Couldn't find Employee by that Id!");
+					this.errormessage = "Couldn't find Employee by that Id!";
+					this.failed = true;
 					this.loading = false;
 				}
 			})
