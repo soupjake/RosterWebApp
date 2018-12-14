@@ -1,6 +1,6 @@
 # RosterWebApp
 
-Open source rostering web application for
+Open source rostering web application which allows the rostering of employees/teams to sessions with appointed and overtime hours. Includes standard CRUD operations, viewing of rostered hours, where an employee/team are between two given dates, assigning absences and other features. Feel free to 
 
 ## Getting Started
 
@@ -16,13 +16,19 @@ Node.js, ASP.NET Core, SQL Server 2016, Visual Studio 2017, Chrome/Firefox/Edge
 
 ### Installing
 
-First restore the project:
+First download/clone the project:
+
+```
+git clone https://github.com/SnakeyHips/RosterWebApp.git
+```
+
+Then restore the project:
 
 ```
 dotnet restore
 ```
 
-Then install the node modules:
+Followed by installing the node modules:
 
 ```
 npm install
@@ -106,11 +112,11 @@ The app also contains specific printing CSS to ensure only relevant information 
 
 ## Contributing
 
-to do
+Please read the [CODE_OF_CONDUCT.md](https://github.com/SnakeyHips/RosterWebApp/blob/master/CODE_OF_CONDUCT.md) for details on the code of conduct when submitting issues and requests. It's just me so I will try my best so answer any issues/requests ASAP. 
 
 ## License
 
-to do
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/SnakeyHips/RosterWebApp/blob/master/LICENSE) file for details.
 
 ## Acknowledgments
 
