@@ -333,7 +333,7 @@ namespace RosterWebApp.Controllers
                     UpdateRosterHoliday(before, after);
                 }
                 //check if state complete
-                if(after.StaffCount < 5)
+                if(after.StaffCount > 5)
                 {
                     after.State = 1;
                 }
