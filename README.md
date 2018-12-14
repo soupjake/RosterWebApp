@@ -1,6 +1,6 @@
 # RosterWebApp
 
-Open source rostering web application which allows the rostering of employees/teams to sessions with appointed and overtime hours. Includes standard CRUD operations, viewing of rostered hours, where an employee/team are between two given dates, assigning absences and other features. Feel free to use and adapt for your own uses or even take/ask how I did any features you like the look of. 
+Open source rostering web application which allows the rostering of employees/teams to work sessions with appointed and overtime hours. Includes standard CRUD operations, viewing of rostered hours, where an employee/team are between two given dates, assigning absences and other features. Feel free to use and adapt for your own uses or even take/ask how I did any features you like the look of. 
 
 ## Getting Started
 
