@@ -65,7 +65,7 @@ You can assign absences to an employee with a date range and amount of hours. Ea
 
 ![](demoimages/absencedemo.gif)
 
-Note, if an absence is assigned AFTER an employee is rostered to a session, they will still be rostered. You should unroster an employee from a session if they are going to be assigned an absence.
+Note, if an absence is assigned AFTER an employee is rostered to a session, they will still be rostered. You should unroster an employee from a session if they are going to be assigned an absence. I felt the implementation of an automatic unroster when assigning an absence afterwards would be too intrusive as I prefer to leave out as much automatic stuff as possible.
 
 ### View Roster Hours
 
