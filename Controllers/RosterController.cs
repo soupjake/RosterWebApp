@@ -89,8 +89,8 @@ namespace RosterWebApp.Controllers
                             e.AppointedHours += t.AppointedHours;
                             e.AbsenceHours += t.AbsenceHours;
                             e.OvertimeHours += t.OvertimeHours;
-                            e.NegHours += e.NegHours;
-                            e.COHours += e.COHours;
+                            e.NegHours += t.NegHours;
+                            e.COHours += t.COHours;
                             break;
                         }
                     }
