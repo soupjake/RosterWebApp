@@ -330,6 +330,11 @@ export default class RosterSessionComponent extends Vue {
 	}
 
 	clear() {
+		this.team = {
+			id: 0,
+			name: "",
+			members: []
+		}
 		this.sessionmanagers = [];
 		this.sessionmanagers.push(this.createSessionEmployee("Manager"));
 		this.sessionsupervisors = [];
