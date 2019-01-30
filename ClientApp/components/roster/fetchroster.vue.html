@@ -2,7 +2,7 @@
 	<v-layout row wrap justify-center v-if="$vuetify.breakpoint.smAndUp">
 		<v-layout justify-center>
 			<v-flex md4 sm6>
-				<v-select v-model="selectedWeeks" :items="weeks" label="Weeks" v-on:change="loadRoster" :loading="loadingweeks" multiple chips box />
+				<v-select v-model="selectedWeeks" :items="weeks" label="Weeks" v-on:input="loadRoster" :loading="loadingweeks" multiple chips box />
 			</v-flex>
 		</v-layout>
 		<v-flex xs11>
@@ -36,7 +36,7 @@
 	</v-layout>
 	<v-layout v-else column>
 		<p class="title text-xs-center">Roster</p>
-		<v-select v-model="selectedWeeks" :items="weeks" label="Weeks" v-on:change="loadRoster" :loading="loadingweeks" multiple chips box />
+		<v-select v-model="selectedWeeks" :items="weeks" label="Weeks" v-on:input="loadRoster" :loading="loadingweeks" multiple chips box />
 		<v-text-field class="mb-4" v-model="search" append-icon="search" label="Search" single-line hide-details box/>
 		<v-data-iterator :items="employees" :search="search" :loading="loading" row wrap>
 			<v-flex slot="item" slot-scope="props" class="mb-4" xs12>
