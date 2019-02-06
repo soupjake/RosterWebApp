@@ -3,11 +3,11 @@
 		<v-flex class="text-xs-center" xs11>
 			<v-menu lazy transition="scale-transition">
 				<v-text-field slot="activator" v-model="startDateFormatted" label="Start date" append-icon="event" readonly box />
-				<v-date-picker v-model="startdate" v-on:change="loadSessions" first-day-of-week="1" />
+				<v-date-picker v-model="startdate" v-on:input="loadSessions" first-day-of-week="1" />
 			</v-menu>
 			<v-menu lazy transition="scale-transition">
 				<v-text-field slot="activator" v-model="endDateFormatted" label="End date" append-icon="event" readonly box />
-				<v-date-picker v-model="enddate" v-on:change="loadSessions" first-day-of-week="1" />
+				<v-date-picker v-model="enddate" v-on:input="loadSessions" first-day-of-week="1" />
 			</v-menu>
 		</v-flex>
 		<v-flex xs11>
@@ -40,11 +40,11 @@
 		<p class="title text-xs-center">{{ employee.id}} - {{ employee.name }}</p>
 		<v-menu lazy transition="scale-transition" full-width>
 			<v-text-field slot="activator" v-model="startDateFormatted" label="Start date" append-icon="event" readonly box />
-			<v-date-picker v-model="startdate" v-on:change="loadSessions" first-day-of-week="1" full-width />
+			<v-date-picker v-model="startdate" v-on:input="loadSessions" first-day-of-week="1" full-width />
 		</v-menu>
 		<v-menu lazy transition="scale-transition" full-width>
 			<v-text-field slot="activator" v-model="endDateFormatted" label="End date" append-icon="event" readonly box />
-			<v-date-picker v-model="enddate" v-on:change="loadSessions" first-day-of-week="1" full-width />
+			<v-date-picker v-model="enddate" v-on:input="loadSessions" first-day-of-week="1" full-width />
 		</v-menu>
 		<v-text-field class="mb-4" v-model="search" append-icon="search" label="Search" single-line hide-details box />
 		<v-data-iterator :items="sessions" :search="search" :loading="loading" row wrap>
